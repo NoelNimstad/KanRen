@@ -34,10 +34,21 @@
     {
         "jp": "両親",
         "en": "Parents"
-    }
-    ,
+    },
     {
         "jp": "選ぶ",
         "en": "To choose"
+    },
+    {
+        "jp": "手紙",
+        "en": "Letter"
+    },
+    {
+        "jp": "発見",
+        "en": "Remark・Statement"
+    },
+    {
+        "jp": "意見",
+        "en": "Opinion"
     }
 ]
