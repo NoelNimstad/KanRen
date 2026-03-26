@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <main>
+            <div>
+                <h1 id="prompt">Loading〈〉</h1>
+                <div id="parent" style="display: flex; justify-content: center;">
+                    <div style="width: 327px; height: 327px" id="container"></div>
+                </div>
+                <div class="buttons">
+                    <button id="restart">Restart</button>
+                    <button id="reveal">Reveal</button>
+                    <button id="next_char">Next character</button>
+                    <button id="next">Next word</button>
+                </div>
+            </div>
+            <button id="load">Load pack</button>
+        </main>
+        <section>
+            <h2>Edit pack</h2>
+            <table>
+                <tbody>
+                    <td>English</td>
+                    <td>Japanese</td>
+                    <td>Remove</td>
+                </tbody>
+                <tbody
+                    id="table"
+                    herb map="pack"
+                    template="tag('tr', tag('td', tag('input', '', [['value', $h.en], ['class', 'inputs-en']]))
+                                       +tag('td', tag('input', '', [['value', $h.jp], ['class', 'inputs-jp']]))
+                                       +tag('td', tag('button', '🗑️', [['class', 'trash']])))">
+                </tbody>
+            </table>
+            <div class="buttons">
+                <button id="add">Add item</button>
+                <button id="export">Export</button>
+            </div>
+        </section>
+        <input type="file" id="file-input" style="display: none;">
+        <script src="kb.js"></script>
+        <script src="herb.js"></script>
+        <script>
+            herb.initialise();
+
+            const progress = document.getElementById("prompt");
+            const parent = document.getElementById("parent");
+            kb.initialise(document.getElementById("container"));
+            kb.setSensitivity(15);
+
+            var pack = [];
+            let words = [];
+            let currentWord = {};
+            let currentCharacter = 0;
+            let mistakes = 0;
+
+            function promptNewWord()
+            {
+                if(words.length === 0)
+                {
+                    alert("Pack finished! Restarting.")
+                    restart();
+                }
+                
+                const index = Math.floor(Math.random() * words.length);
+                currentWord = words[index];
+                words.splice(index, 1);
+
+                currentCharacter = 0;
+                progress.innerText = currentWord.en + "〈〉";
+
+                kb.load(currentWord.jp[currentCharacter]);
+            }
+
+            function nextCharacter()
+            {
+                progress.innerText = currentWord.en + "〈" + currentWord.jp.substring(0, ++currentCharacter) + "〉";
+
+                progress.classList.add("correct");
+                setTimeout(() =>
+                {
+                    progress.classList.remove("correct");
+                }, 250)
+
+                if(currentCharacter === currentWord.jp.length)
+                {
+                    promptNewWord();
+                    return;
+                }
+
+                kb.load(currentWord.jp[currentCharacter]);
+            }
+
+            kb.setOnComplete(() => nextCharacter());
+
+            kb.setOnMistake(() =>
+            {
+                if(++mistakes === 3)
+                {
+                    mistakes = 0;
+                    kb.ghostNextStroke();
+                }
+
+                progress.classList.add("mistake");
+                setTimeout(() =>
+                {
+                    progress.classList.remove("mistake");
+                }, 250)
+            });
+
+            (async() =>
+            {
+                const res = await fetch("./default.json");
+                pack = await res.json();
+                herb.propagate();
+                setUpTableEvents();
+
+                for(let i = 0; i < pack.length; i++)
+                {
+                    words.push(pack[i]); // deep copy
+                }
+
+                promptNewWord();
+            })();
+
+            function restart()
+            {
+                words = [];
+
+                for(let i = 0; i < pack.length; i++)
+                {
+                    words.push(pack[i]);
+                }
+
+                promptNewWord();
+            }
+
+            document.getElementById("restart").addEventListener("click", () => restart());
+
+            function setUpTableEvents()
+            {
+                let trashes = document.getElementsByClassName("trash");
+                for(let i = 0; i < trashes.length; i++)
+                {
+                    trashes[i].addEventListener("click", () =>
+                    {
+                        pack.splice(i, 1);
+                        herb.refresh("table");
+                        setUpTableEvents();
+                    });
+                }
+
+                let inputs_en = document.getElementsByClassName("inputs-en");
+                for(let i = 0; i < inputs_en.length; i++)
+                {
+                    inputs_en[i].addEventListener("input", e =>
+                    {
+                        pack[i].en = e.target.value;
+                    })
+                }
+
+                let inputs_jp = document.getElementsByClassName("inputs-jp");
+                for(let i = 0; i < inputs_jp.length; i++)
+                {
+                    inputs_jp[i].addEventListener("input", e =>
+                    {
+                        pack[i].jp = e.target.value;
+                    })
+                }
+            }
+
+            document.getElementById("add").addEventListener("click", () =>
+            {
+                pack.push({ en: "", jp: "" });
+                herb.refresh("table");
+                setUpTableEvents();
+            });
+
+            document.getElementById("export").addEventListener("click", () =>
+            {
+                window.prompt("Copy JSON to clipboard: ⌘ + C, ↵", JSON.stringify(pack));
+            });
+
+            const file_input = document.getElementById("file-input");
+
+            document.getElementById("load").addEventListener("click", () =>
+            {
+                file_input.click();
+            });
+
+            file_input.addEventListener("change", async e =>
+            {
+                const file = e.target.files.item(0)
+                const text = await file.text();
+
+                pack = JSON.parse(text);
+                console.log(pack);
+                
+                herb.refresh("table");
+                setUpTableEvents();
+            });
+
+            document.getElementById("next").addEventListener("click", () => promptNewWord());
+            document.getElementById("next_char").addEventListener("click", () => nextCharacter());
+
+            document.getElementById("reveal").addEventListener("click", () => kb.revealAllStrokes("rgba(150, 0, 0, 0.9)"));
+        </script>
+    </body>
+</html>
