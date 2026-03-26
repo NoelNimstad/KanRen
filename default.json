@@ -50,5 +50,45 @@
     {
         "jp": "意見",
         "en": "Opinion"
+    },
+    {
+        "jp": "案内書",
+        "en": "Guidebook"
+    },
+    {
+        "jp": "発表",
+        "en": "Announcement・Publication"
+    },
+    {
+        "jp": "会議",
+        "en": "Meeting・Conference"
+    },
+    {
+        "jp": "地球温暖化",
+        "en": "Global warming"
+    },
+    {
+        "jp": "国際",
+        "en": "International"
+    },
+    {
+        "jp": "韓国",
+        "en": "Korea"
+    },
+    {
+        "jp": "台湾",
+        "en": "Taiwan"
+    },
+    {
+        "jp": "大使館",
+        "en": "Embassy"
+    },
+    {
+        "jp": "説明",
+        "en": "Explanation"
+    },
+    {
+        "jp": "歴史",
+        "en": "History"
     }
 ]

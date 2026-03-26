@@ -13,6 +13,7 @@
                 <div class="buttons">
                     <button id="restart">Restart</button>
                     <button id="reveal">Reveal</button>
+                    <button id="retry">Retry character</button>
                     <button id="next_char">Next character</button>
                     <button id="next">Next word</button>
                 </div>
@@ -207,7 +208,13 @@
             document.getElementById("next").addEventListener("click", () => promptNewWord());
             document.getElementById("next_char").addEventListener("click", () => nextCharacter());
 
-            document.getElementById("reveal").addEventListener("click", () => kb.revealAllStrokes("rgba(150, 0, 0, 0.9)"));
+            document.getElementById("reveal").addEventListener("click", () => kb.revealAllStrokes());
+
+            document.getElementById("retry").addEventListener("click", () =>
+            {
+                mistakes = 0;         
+                kb.load(currentWord.jp[currentCharacter])
+            });
         </script>
     </body>
 </html>

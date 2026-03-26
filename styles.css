@@ -220,7 +220,7 @@ tbody:first-child > tr > td:last-child
     border-bottom-left-radius: 0;
 }
 
-#restart, #reveal, #next_char
+#restart, #reveal, #next_char, #retry
 {
     border-right: 1px solid lightgray;
 }
