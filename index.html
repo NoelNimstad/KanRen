@@ -38,10 +38,12 @@
             </table>
             <div class="buttons">
                 <button id="add">Add item</button>
-                <button id="export">Export</button>
+                <button id="export">Export file</button>
+                <button id="JSON">Copy JSON</button>
             </div>
         </section>
         <input type="file" id="file-input" style="display: none;">
+        <a id="download" download="mypack.json" style="display: none"></a>
         <script src="kb.js"></script>
         <script src="herb.js"></script>
         <script>
@@ -181,7 +183,14 @@
                 setUpTableEvents();
             });
 
+            const download = document.getElementById("download");
             document.getElementById("export").addEventListener("click", () =>
+            {
+                download.href = `data:text/plain;charset=utf-8,${ encodeURIComponent(JSON.stringify(pack)) }`;
+                download.click();
+            });
+
+            document.getElementById("JSON").addEventListener("click", () =>
             {
                 window.prompt("Copy JSON to clipboard: ⌘ + C, ↵", JSON.stringify(pack));
             });

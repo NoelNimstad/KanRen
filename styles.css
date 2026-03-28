@@ -75,12 +75,12 @@ button
     cursor: pointer;
 }
 
-#restart, #add, #export
+#restart, #add, #export, #JSON
 {
     margin-top: 1rem;
 }
 
-#add, #export
+#add, #export, #JSON
 {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     background-color: rgb(214, 71, 39);
@@ -207,7 +207,7 @@ tbody:first-child > tr > td:last-child
     border-radius: 0;
 }
 
-.buttons > button:first-child
+.buttons > button:not(:last-child)
 {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
