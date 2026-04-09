@@ -38,6 +38,7 @@
             </table>
             <div class="buttons">
                 <button id="add">Add item</button>
+                <button id="prune">Remove all</button>
                 <button id="export">Export file</button>
                 <button id="JSON">Copy JSON</button>
             </div>
@@ -179,6 +180,13 @@
             document.getElementById("add").addEventListener("click", () =>
             {
                 pack.push({ en: "", jp: "" });
+                herb.refresh("table");
+                setUpTableEvents();
+            });
+
+            document.getElementById("prune").addEventListener("click", () =>
+            {
+                pack = [{ en: "", jp: "" }];
                 herb.refresh("table");
                 setUpTableEvents();
             });

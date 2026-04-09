@@ -98,5 +98,13 @@
     {
         "jp": "天井",
         "en": "Ceiling"
+    },
+    {
+        "jp": "詳細",
+        "en": "Details"
+    },
+    {
+        "jp": "帚",
+        "en": "Broom"
     }
 ]
