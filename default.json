@@ -110,5 +110,13 @@
     {
         "jp": "詳細",
         "en": "Details"
+    },
+    {
+        "jp": "解答",
+        "en": "Solution"
+    },
+    {
+        "jp": "穴場",
+        "en": "Hidden gem (location)"
     }
 ]
